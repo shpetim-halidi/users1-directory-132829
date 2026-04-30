@@ -1,4 +1,4 @@
-// Student: Shpetim Halidi | ID: 132829
+// Student: Shpetim Halidi | ID: 132829.
 import { useState, useEffect, useMemo } from 'react';
 import UserCard from './components/UserCard';
 import RegisterUser from './components/RegisterUser';
