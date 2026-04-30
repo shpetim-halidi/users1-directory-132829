@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// Student: Shpetim Halidi | ID: 132829
+import { useState, useEffect, useMemo } from 'react';
+import UserCard from './components/UserCard';
+import RegisterUser from './components/RegisterUser';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+        .then(res => {
+          if (!res.ok) throw new Error("Request failed");
+          return res.json();
+        })
+        .then(data => {
+          // Adding extra fields rating:5 and verified:false as required
+          const updatedData = data.map(u => ({ ...u, rating: 5, verified: false }));
+          setUsers(updatedData);
+          setLoading(false);
+        })
+        .catch(err => {
+          setError(err.message);
+          setLoading(false);
+        });
+  }, []);
+
+  // useMemo for derived data
+  const averageRating = useMemo(() => {
+    if (users.length === 0) return 0;
+    const total = users.reduce((acc, user) => acc + user.rating, 0);
+    return (total / users.length).toFixed(2);
+  }, [users]);
+
+  const addUser = (newUser) => setUsers([...users, newUser]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
-    <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <h1>User Directory</h1>
+        <h3>Average Rating: {averageRating}</h3>
+        <RegisterUser addUser={addUser} />
+        <hr />
+        {users.map(u => <UserCard key={u.id} user={u} />)}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  );
 }
 
-export default App
+export default App;
