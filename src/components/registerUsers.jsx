@@ -7,7 +7,6 @@ export default function RegisterUser({ addUser }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Validation rules from exam paper
         if (formData.name.trim() === "") return alert("Name field must not be empty.");
         if (formData.rating < 1 || formData.rating > 5) return alert("Rating must be between 1 and 5 inclusive.");
 

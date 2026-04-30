@@ -15,7 +15,6 @@ function App() {
           return res.json();
         })
         .then(data => {
-          // Adding extra fields rating:5 and verified:false as required
           const updatedData = data.map(u => ({ ...u, rating: 5, verified: false }));
           setUsers(updatedData);
           setLoading(false);
@@ -26,7 +25,6 @@ function App() {
         });
   }, []);
 
-  // useMemo for derived data
   const averageRating = useMemo(() => {
     if (users.length === 0) return 0;
     const total = users.reduce((acc, user) => acc + user.rating, 0);

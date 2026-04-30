@@ -9,7 +9,7 @@ export default function UserCard({ user }) {
             <p>Rating: {user.rating}</p>
             <p>Verified: {user.verified ? "Yes" : "No"}</p>
 
-            {/* Conditional Indicators */}
+            {}
             {user.verified === true && <p style={{color: 'blue'}}>Verified User</p>}
             {user.rating >= 4 && <p style={{color: 'orange'}}>Top rated</p>}
         </div>
